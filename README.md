@@ -18,11 +18,14 @@ For getting started quickly, refer to the `/examples` directory. It features exa
 
 # Usage
 
+## Setup
+To get set up, clone the integration fork, install its requirements with `pip install -r requirements.txt` and finally install `tlc` with `pip install tlc`.
+
 ## Training
 
 Datasets are automatically registered with 3LC when starting training. To get started, simply call `train.py` just like you would previously.
 ```python
-python train.py ...
+python train.py --data coco128.yaml --weights yolov5n.pt --device 0
 ```
 
 In order to customize 3LC specific parameters, use the various 3LC specific command line arguments which have been added. Use `python train.py -h` and look for the parameters with names starting with `tlc`.
@@ -39,7 +42,7 @@ Metrics are automatically captured after each epoch during training. You can cus
 It is also possible to collect metrics independent of training. The integration fork has a script `collect.py`, analogous to `detect.py` with labels, which collects 3LC metrics for the provided data and model. This is useful for cases where you already have a trained model and would like to start collecting metrics without doing any more training, or e.g. for cases where you would like to collect metrics on different size images from training.
 
 ```python
-python collect.py ...
+python collect.py --data coco128.yaml --weights yolov5n.pt --device 0
 ```
 
 ## Exporting data
