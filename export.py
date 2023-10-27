@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import argparse
 from pathlib import Path
 
@@ -5,20 +7,26 @@ from tlc.core.objects import Table
 from tlc.core.url import Url
 
 
-def export_labels(table: Table, output_url: Url, overwrite: bool = False) -> None:
+def export_labels(table: Table,
+                  output_url: Url | str,
+                  overwrite: bool = False) -> None:
     """Export a the bounding boxes originating from TableFromYolo to YOLO formatted labels in output_url.
 
     :param table: The table to export bounding boxes from.
     :param output_url: The url to write the bounding box data to.
     :param overwrite: Whether to overwrite files at the output_url.
     """
+    output_url = Url(output_url)
+
+    output_path = Path(output_url.to_str())
 
     # Check that the output_url is a directory
-    if not output_url.is_dir():
+    if not output_path.is_dir():
         raise ValueError(f"output_url must be a directory, got {output_url}")
-    
-    if output_url.exists() and not overwrite:
-        raise ValueError("output_url already exists, use --overwrite to overwrite")
+
+    if output_path.exists() and not overwrite:
+        raise ValueError(
+            "output_url already exists, use --overwrite to overwrite")
 
     # Iterate over the dataset and write labels to the output url, based on the filenames
     for row in table:
@@ -34,7 +42,7 @@ def export_labels(table: Table, output_url: Url, overwrite: bool = False) -> Non
         # Get the part of the image path after the last occurence of 'images'
         subpath = _get_subpath_after_images(image_path)
 
-        label_path = Path(output_url.to_str()) / "labels" / subpath.with_suffix(".txt")
+        label_path = output_path / "labels" / subpath.with_suffix(".txt")
         label_path.parent.mkdir(parents=True, exist_ok=overwrite)
         with open(label_path, "w") as f:
             f.write("\n".join(lines))
@@ -56,10 +64,17 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Export bounding boxes to YOLO labels.')
-    parser.add_argument('--table-url', type=Url, help='The url of the table to export labels from.')
-    parser.add_argument('--output-url', type=Url, help='The url to write the labels to.')
-    parser.add_argument('--overwrite', action='store_true', help='Whether to overwrite files at the output_url.')
+    parser = argparse.ArgumentParser(
+        description='Export bounding boxes to YOLO labels.')
+    parser.add_argument('--table-url',
+                        type=Url,
+                        help='The url of the table to export labels from.')
+    parser.add_argument('--output-url',
+                        type=Url,
+                        help='The url to write the labels to.')
+    parser.add_argument('--overwrite',
+                        action='store_true',
+                        help='Whether to overwrite files at the output_url.')
 
     args = parser.parse_args()
 
