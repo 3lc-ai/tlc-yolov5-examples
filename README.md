@@ -48,9 +48,3 @@ In order to export your bounding box data back into the YOLO format, `export.py`
 Note that `export.py` only exports the labels. You have to move your labels next to your images to use them for training, the script will not copy the images for you.
 
 To export the labels to a different format we recommend to start with `export.py` and convert it to suit your needs.
-
-# IMPROVEMENTS TO YOLOV5 INTEGRATION
-Timeout parameter
-Make running training with 3lc depend on whether tlc is installed or not. Use default dataloaders and so on if not and warn about it.
-project_path, needed?
-tablefromyolo improvements
