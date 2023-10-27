@@ -13,13 +13,15 @@ Please note that the AGPL-3.0 license of YOLOv5 applies to any usage of YOLOv5, 
 # Introduction
 The central workflow when using 3LC is repeated model training, metrics collection and data editing. This document takes you through how to do this in YOLOv5.
 
+The fork is available from ...
+
 # Examples
 For getting started quickly, refer to the `/examples` directory. It features examples of training and metrics collection with 3LC.
 
 # Usage
 
 ## Setup
-To get set up, clone the integration fork, install its requirements with `pip install -r requirements.txt` and finally install `tlc` with `pip install tlc`.
+To get set up, clone the integration fork with `git clone ...`, install its requirements with `pip install -r requirements.txt` and finally install `tlc` with `pip install tlc`.
 
 ## Training
 
