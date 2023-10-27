@@ -1,10 +1,10 @@
 # License Disclaimer
 
-This repository contains examples of YOLOv5 usage and is distributed under a dual license. The portions of the code specific to YOLOv5 are made available under the AGPL-3.0 license, following the license terms of YOLOv5, which is maintained by Ultralytics. A fork with YOLOv5 integration is also available under the AGPL-3.0 license.
+This repository contains examples of YOLOv5 usage and is distributed under a Dual License. The portions of the code specific to YOLOv5 are made available under the AGPL-3.0 license, following the license terms of YOLOv5, which is maintained by Ultralytics. A fork with YOLOv5 integration is also available under the AGPL-3.0 license.
 
 The remaining parts of the code in this repository are distributed under a permissive BSD license.
 
-Please note that the AGPL-3.0 license of YOLOv5 applies to any usage of YOLOv5, including the integration fork used here.
+Enterprise usage is permitted under this Dual License setup; however, it is subject to the commercial license terms of Ultralytics YOLOv5.
 
 ## Licensing Files
 - For code specific to YOLOv5 and the integration fork, please refer to [LICENSE-AGPL-3.0](./LICENSE-AGPL-3.0).
