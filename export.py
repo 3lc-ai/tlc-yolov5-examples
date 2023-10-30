@@ -63,7 +63,7 @@ def export_labels(table: Table,
     with open(output_path / "dataset.yaml", "w", encoding="utf-8") as f:
         # Add a comment at the top of the file, then dump the yaml
         f.write("# YOLOv5 🚀 by Ultralytics, AGPL-3.0 license\n")
-        f.write("# This is a draft dataset file, please update the paths. The path and train fields point to the written labels.\n")
+        f.write("# This is a draft dataset file, please update the paths. The path is set to the chosen output_dir.\n")
         yaml.dump(yaml_content, f, default_flow_style=False, sort_keys=False)
 
 
