@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import yaml
 from pathlib import Path
 
 from tlc.core.objects import Table
@@ -28,8 +29,10 @@ def export_labels(table: Table,
         raise ValueError(
             "output_url already exists, use --overwrite to overwrite")
 
+    label_path = None
+
     # Iterate over the dataset and write labels to the output url, based on the filenames
-    for row in table:
+    for row in table.table_rows:
         image_path = row['image']
         bounding_boxes = row['bbs']['bb_list']
 
@@ -46,6 +49,22 @@ def export_labels(table: Table,
         label_path.parent.mkdir(parents=True, exist_ok=overwrite)
         with open(label_path, "w") as f:
             f.write("\n".join(lines))
+
+    # Write a draft dataset yaml file
+    categories = table.get_value_map_for_column("bbs")
+
+    yaml_content = {
+        "path": str(output_path.absolute().as_posix()),
+        "train": str(label_path.parent.relative_to(output_path).as_posix()),
+        "val": "",
+        "categories": categories,
+    }
+
+    with open(output_path / "dataset.yaml", "w", encoding="utf-8") as f:
+        # Add a comment at the top of the file, then dump the yaml
+        f.write("# YOLOv5 🚀 by Ultralytics, AGPL-3.0 license\n")
+        f.write("# This is a draft dataset file, please update the paths. The path and train fields point to the written labels.\n")
+        yaml.dump(yaml_content, f, default_flow_style=False, sort_keys=False)
 
 
 def _get_subpath_after_images(full_path):
