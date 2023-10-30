@@ -16,7 +16,7 @@ The central workflow when using 3LC is repeated model training, metrics collecti
 The fork is available from ... TODO: GitHub Link?
 
 # Examples
-For getting started quickly, refer to the `/examples` directory. It features examples of training and metrics collection with 3LC.
+For getting started quickly, refer to the `examples` directory. It features an example of training and metrics collection on the `COCO128` dataset, and an example of exporting data 
 
 # Usage
 
@@ -32,7 +32,7 @@ python train.py --data coco128.yaml --weights yolov5n.pt --device 0
 
 In order to customize 3LC specific parameters, use the various 3LC specific command line arguments which have been added. Use `python train.py -h` and look for the parameters with names starting with `tlc`.
 
-They will allow you to specify if, when, and how often, to collect metrics during training, which revisions to use for validation and training and more.
+They will allow you to specify if, when, and how often, to collect metrics during training, and which revisions to use for validation and training. It is also possible to disable metrics collection entirely for a training run. 
 
 ## Collecting metrics
 There are two ways to perform 3LC metrics collection in YOLOv5. They can either be captured during training, or separate from training.
@@ -52,6 +52,6 @@ python collect.py --data coco128.yaml --weights yolov5n.pt --device 0
 ## Exporting data
 In order to export your bounding box data back into the YOLO format, `export.py` can be used. It accepts three command line arguments, where you specify the path to the table to export data from, the path to where you want your labels to end up, and optionally whether to overwrite any existing labels at that location. Use `python export.py -h` for more details.
 
-Note that `export.py` only exports the labels and a draft dataset YAML file (without a path to the images, you will have to fill in the blanks). You have to move your labels next to your images to use them for training, the script will not copy the images for you.
+Note that `export.py` only exports the labels and a draft dataset YAML file (without a path to the images, you will have to fill in the blanks depending on where you have your images and labels). You have to move your labels next to your images to use them for training, the script will not copy the images for you.
 
 To export the labels to a different format we recommend to start with `export.py` and convert it to suit your needs.

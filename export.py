@@ -55,7 +55,7 @@ def export_labels(table: Table,
 
     yaml_content = {
         "path": str(output_path.absolute().as_posix()),
-        "train": str(label_path.parent.relative_to(output_path).as_posix()),
+        "train": "",
         "val": "",
         "categories": categories,
     }
