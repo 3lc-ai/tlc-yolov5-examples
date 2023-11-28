@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import argparse
+import numpy as np
 import yaml
 from pathlib import Path
 
 from tlc.core.objects import Table
 from tlc.core.url import Url
+from tqdm.auto import tqdm
 
 
 def export_labels(table: Table,
@@ -32,23 +34,24 @@ def export_labels(table: Table,
     label_path = None
 
     # Iterate over the dataset and write labels to the output url, based on the filenames
-    for row in table.table_rows:
+    for row in tqdm(table.table_rows):
         image_path = row['image']
         bounding_boxes = row['bbs']['bb_list']
 
         # Read out the bouinding boxes
         lines = []
         for bounding_box in bounding_boxes:
-            line = f"{bounding_box['label']} {bounding_box['x0']} {bounding_box['y0']} {bounding_box['x1']} {bounding_box['y1']}"
+            line = f"{bounding_box['label']} {str(np.float32(bounding_box['x0']))} {str(np.float32(bounding_box['y0']))} {str(np.float32(bounding_box['x1']))} {str(np.float32(bounding_box['y1']))}"
             lines.append(line)
 
         # Get the part of the image path after the last occurence of 'images'
         subpath = _get_subpath_after_images(image_path)
 
         label_path = output_path / "labels" / subpath.with_suffix(".txt")
-        label_path.parent.mkdir(parents=True, exist_ok=overwrite)
-        with open(label_path, "w") as f:
-            f.write("\n".join(lines))
+        if lines:
+            label_path.parent.mkdir(parents=True, exist_ok=overwrite)
+            with open(label_path, "w") as f:
+                f.write("\n".join(lines))
 
     # Write a draft dataset yaml file
     categories = table.get_value_map_for_column("bbs")
