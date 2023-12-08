@@ -1,15 +1,15 @@
 # 3LC and YoloV5 integration
 
 [3LC](https://3lc.ai) is a tool which gives real-time insights into how
-machine-learning models learn from data, enabling data scientists to
-make informed decisions, enhancing model accuracy and performance. This
-repository contains documentation and instruction for how to use 3LC with the
+machine-learning models learn from data, enabling data scientists to make
+informed decisions, enhancing model accuracy and performance. This repository
+contains documentation and instruction for how to use 3LC with the
 [YOLOv5](https://github.com/ultralytics/yolov5) "You-Only-Look-Once" object
 detection model.
 
-In order to use 3LC and YOLOv5 together, an integration fork of 
-YOLOv5 has been created that incorporates 3LC metrics collection into the 
-existing YOLOv5 framework. 
+In order to use 3LC and YOLOv5 together, an integration fork of YOLOv5 has been
+created that incorporates 3LC metrics collection into the existing YOLOv5
+framework. 
 
 The integration fork is available on [GitHub](https://github.com/3lc-ai/yolov5)
 and it can be cloned using the following command:
@@ -19,8 +19,8 @@ git clone https://github.com/3lc-ai/yolov5
 ```
 
 The integration fork is designed to be a drop-in replacement for the official
-YOLOv5 repository, and adds some extra command-line options to `train.py` 
-to control 3LC metrics collection.
+YOLOv5 repository, and adds some extra command-line options to `train.py` to
+control 3LC metrics collection.
 
 # License Disclaimer
 
@@ -40,6 +40,15 @@ subject to the commercial license terms of Ultralytics YOLOv5.
 - For code specific to YOLOv5 and the integration fork, refer to
   [LICENSE-AGPL-3.0](./LICENSE-AGPL-3.0).
 - For all other code, refer to [LICENSE-BSD](./LICENSE-BSD).
+
+# Release Notes
+
+We are making continuous improvements to the integration. To follow the changes
+in detail, see the respective release notes below:
+
+| Page                                    | Summary                                                                                                                                                                               |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [tlc_2.0.2](release_notes/tlc_2.0.2.md) | `--data` no longer required, optionally discard all classes but class 0, image embeddings, per-image loss metric, updated logging and error reporting and batched metrics collection. |
 
 # Examples
 For getting started quickly, refer to the `examples` directory. It features an
@@ -73,10 +82,6 @@ also possible to disable metrics collection entirely for a training run.
 ## Collecting metrics
 There are two ways to perform 3LC metrics collection in YOLOv5. They can either
 be captured during training, or separate from training.
-
-Note that in both cases, metrics collection uses a batch size of 1 in order to
-closely resemble inference passes as can be done in `detect.py`, which has the
-same batch size limitation.
 
 ### During training
 Metrics are automatically captured after each epoch during training. You can
