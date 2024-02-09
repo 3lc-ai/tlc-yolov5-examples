@@ -1,4 +1,4 @@
-# 3LC and YoloV5 integration
+# 3LC integrations with YOLOv5 and YOLOv8
 
 [3LC](https://3lc.ai) is a tool which gives real-time insights into how
 machine-learning models learn from data, enabling data scientists to make
@@ -7,26 +7,17 @@ contains documentation and instruction for how to use 3LC with the
 [YOLOv5](https://github.com/ultralytics/yolov5) "You-Only-Look-Once" object
 detection model.
 
-In order to use 3LC and YOLOv5 together, an integration fork of YOLOv5 has been
-created that incorporates 3LC metrics collection into the existing YOLOv5
-framework. 
+In order to use 3LC and YOLOv5/8 together, integration forks of `YOLOv5` and `ultraltyics` have been
+created that incorporate 3LC metrics collection into the existing frameworks.
 
-The integration fork is available on [GitHub](https://github.com/3lc-ai/yolov5)
-and it can be cloned using the following command:
+The integration forks are designed to be drop-in replacements for the official
+repositories, and adds extra 3LC options to customize various 3LC features.
 
-```sh
-git clone https://github.com/3lc-ai/yolov5
-```
+## License Disclaimer
 
-The integration fork is designed to be a drop-in replacement for the official
-YOLOv5 repository, and adds some extra command-line options to `train.py` to
-control 3LC metrics collection.
-
-# License Disclaimer
-
-This repository contains examples of YOLOv5 usage and is distributed under a
-Dual License. The portions of the code specific to YOLOv5 are made available
-under the AGPL-3.0 license, following the license terms of YOLOv5, which is
+This repository contains examples of YOLOv5 and YOLOv8 (`ultralytics`) usage and is distributed under a
+Dual License. The portions of the code specific to YOLOv5 and YOLOv8 are made available
+under the AGPL-3.0 license, following the license terms of YOLOv5 and YOLOv8, which is
 maintained by Ultralytics. A fork with YOLOv5 integration is also available
 under the AGPL-3.0 license.
 
@@ -34,73 +25,35 @@ The remaining parts of the code in this repository are distributed under a
 permissive BSD license.
 
 Enterprise usage is permitted under this Dual License setup; however, it is
-subject to the commercial license terms of Ultralytics YOLOv5.
+subject to the commercial license terms of Ultralytics YOLOv5 and YOLOv8.
 
-## Licensing Files
-- For code specific to YOLOv5 and the integration fork, refer to
-  [LICENSE-AGPL-3.0](./LICENSE-AGPL-3.0).
+### Licensing Files
+
+- For code specific to YOLOv5, YOLOv8 and the corresponding integration forks, refer to [LICENSE-AGPL-3.0](./LICENSE-AGPL-3.0).
 - For all other code, refer to [LICENSE-BSD](./LICENSE-BSD).
 
-# Release Notes
+## Getting Started and Documentation
 
-We are making continuous improvements to the integration. To follow the changes
-in detail, see the respective release notes below:
+In order to get started using the integrations and see documentation, refer to the `README.md` files in the respective forks:
+
+| Integration                                     | Getting Started / Documentation                                                                                            |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| [https://github.com/3lc-ai/yolov5](YOLOv5)      | [https://github.com/3lc-ai/yolov5/tree/tlc_2.2.0/utils/loggers/tlc/README.md](YOLOv5 integration README.md)                |
+| [https://github.com/3lc-ai/ultralytics](YOLOv8) | [https://github.com/3lc-ai/ultralytics/blob/tlc-integration/ultralytics/utils/tlc/README.md](YOLOv8 integration README.md) |
+
+## Release Notes
+
+We are making continuous improvements to the integrations, and aim to keep the integrations up-to-date with the upstream repositories and new features available in `tlc` itself.
+
+The following table details the available releases for the YOLOv5/8 integration.
 
 | Page                                    | Summary                                                                                                                                                                               |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [tlc_2.0.2](release_notes/tlc_2.0.2.md) | `--data` no longer required, optionally discard all classes but class 0, image embeddings, per-image loss metric, updated logging and error reporting and batched metrics collection. |
-
-# Examples
-For getting started quickly, refer to the `examples` directory. It features an
-example of training and metrics collection on the `COCO128` dataset, and an
-example of exporting data 
-
-# Usage
-
-## Setup
-To get set up, clone the integration fork as described above, install its
-requirements with `pip install -r requirements.txt` and finally install the
-`tlc`-Python package.
-
-## Training
-
-Datasets are automatically registered with 3LC when starting training. To get
-started, simply call `train.py` just like you would previously.
-
-```python
-python train.py --data coco128.yaml --weights yolov5n.pt --device 0
-```
-
-In order to customize 3LC specific parameters, use the various 3LC specific
-command line arguments which have been added. Use `python train.py -h` and look
-for the parameters with names starting with `tlc`.
-
-They will allow you to specify if, when, and how often, to collect metrics
-during training, and which revisions to use for validation and training. It is
-also possible to disable metrics collection entirely for a training run. 
-
-## Collecting metrics
-There are two ways to perform 3LC metrics collection in YOLOv5. They can either
-be captured during training, or separate from training.
-
-### During training
-Metrics are automatically captured after each epoch during training. You can
-customize which epochs to collect metrics for during training by providing a set
-of different command line arguments.
-
-### Outside of training
-It is also possible to collect metrics independent of training. The integration
-fork has a script `collect.py`, analogous to `detect.py` with labels, which
-collects 3LC metrics for the provided data and model. This is useful for cases
-where you already have a trained model and would like to start collecting
-metrics without doing any more training, or e.g. for cases where you would like
-to collect metrics on different image sizes from those used in training.
-
-```python
-python collect.py --data coco128.yaml --weights yolov5n.pt --device 0
-```
+| [tlc_2.2.0](release_notes/tlc_2.2.0.md) | Overhaul of the 3LC integration, command line arguments replaced by environment variables, support for `tlc 2.2` project structure, 3LC YAML file, per-epoch and per-class metrics, and much more. Introduction of YOLOv8 integration.         |
 
 ## Exporting data
+
 In order to export your bounding box data back into the YOLO format, `export.py`
 can be used. It accepts three command line arguments, where you specify the path
 to the table to export data from, the path to where you want your labels to end
