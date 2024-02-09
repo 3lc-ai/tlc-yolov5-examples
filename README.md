@@ -38,8 +38,8 @@ In order to get started using the integrations and see documentation, refer to t
 
 | Integration                                     | Getting Started / Documentation                                                                                            |
 | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| [https://github.com/3lc-ai/yolov5](YOLOv5)      | [https://github.com/3lc-ai/yolov5/tree/tlc_2.2.0/utils/loggers/tlc/README.md](YOLOv5 integration README.md)                |
-| [https://github.com/3lc-ai/ultralytics](YOLOv8) | [https://github.com/3lc-ai/ultralytics/blob/tlc-integration/ultralytics/utils/tlc/README.md](YOLOv8 integration README.md) |
+| [YOLOv5](https://github.com/3lc-ai/yolov5)      | [YOLOv5 Integration README.md](https://github.com/3lc-ai/yolov5/tree/tlc_2.2.0/utils/loggers/tlc/README.md)                |
+| [YOLOv8](https://github.com/3lc-ai/ultralytics) | [YOLOv8 Integration README.md](https://github.com/3lc-ai/ultralytics/blob/tlc-integration/ultralytics/utils/tlc/README.md) |
 
 ## Release Notes
 
