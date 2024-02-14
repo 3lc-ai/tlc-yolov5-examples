@@ -8,6 +8,14 @@ There are big improvements to the YOLOv5 integration, available on the [2.2.0 br
 
 The organization of projects, tables and runs has been changed in `tlc` v2.2.0. Corresponding changes have been made to the integration.
 
+## `val.py --task collect` replaces `collect.py`
+
+`collect.py` has been removed. In order to run metrics collection outside of training, call `val.py` and provide `--task collect`. This will collect metrics on the train and validation splits by default.
+
+In order to collect metrics on a specific set of splits, the environment variable `TLC_COLLECTION_SPLITS` can be used by setting it to a comma-separated set of splits. All of these splits must be available in the YAML file provided through `--data`.
+
+In order to collect embeddings and/or loss, refer to the corresponding environment variables for training.
+
 ## 3LC YAML file to specify tables to use
 
 The previous way to specify which table revisions to use (`--data` empty and command line arguments) has been removed. A 3LC YAML file should now be used instead.
@@ -28,13 +36,21 @@ The paths in the 3LC YAML file can be any 3LC `Url`. Therefore, as an example, t
 Once your 3LC YAML has `train` and `val` entries pointing to specific revisions, it will look like the following example:
 
 ```yaml
-train: my_train_table/
-val: my_val_table/
+train: path/to/my_train_table/
+val: path/to/my_val_table/
 ```
 
 In order to train on different revisions, simply change the paths in the file to your desired revision. If you would like to train on the latest revisions in your lineages, you can add `:latest` to one or both of the paths, and 3LC will find the latest revision in the same lineage for those tables. For the above example, with latest on both, the 3LC YAML would look like this:
 
 ```yaml
+train: path/to/my_train_table/:latest
+val: path/to/my_val_table/:latest
+```
+
+An optional key `path` can be used for any common prefix to the Table Urls specified in the file, like this:
+
+```yaml
+path: path/to/
 train: my_train_table/:latest
 val: my_val_table/:latest
 ```
@@ -44,7 +60,7 @@ val: my_val_table/:latest
 On repeatedly calling `train.py` with the same `--data path/to/some_file.yaml`, the 3LC tables created previously will be used again automatically. The file path name (i.e. `some_file` for `path/to/some_file.yaml`) is used for this, so if any tables have been created from this YAML name, they will be used. The latest revision will be used if new revisions are created for either the `train` or `val` table. The specific revisions used are logged to the console. A line is also printed stating that a 3LC YAML file has been created, with example usage.
 
 ---
-**NOTE**: While it is possible to use the regular YAML, we recommend using a 3LC YAML to specify which revisions to use. Most importantly, it   It also enables using specific revisions of the dataset, and adding `:latest` in order to use the latest table in the lineage.
+**NOTE**: While it is possible to use the regular YAML, we recommend using a 3LC YAML to specify which revisions to use. Most importantly, it also enables using specific revisions of the dataset, and adding `:latest` in order to use the latest table in the lineage. After your first run, the written 3LC YAML file can be used.
 
 ---
 
@@ -98,7 +114,7 @@ To make the transition as smooth as possible, here are some examples of how to g
 | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `python train.py --data='' --tlc-image-embeddings-dim 2 --tlc-train-revision-url path/to/my_train_revision_url` | `TLC_IMAGE_EMBEDDINGS_DIM=2 python train.py --data 3LC://my_3lc_data.yaml`                            | Instead of specifying the Urls as command line arguments, notice how a 3LC YAML file used. It needs `train: path/to/my_train_revision_url` and a corresponding `val` revision. |
 | `python train.py --data=coco128.yaml`                                                                           | `python train.py --data=coco128.yaml`                                                                 | For the first time, this will create 3LC Tables and a 3LC YAML pointing to those. On subsequent runs the latest revisions of these starting tables would be used.              |
-| `python train.py --data=coco128.yaml --tlc-mc-start 0 --tlc-mc-interval 2`                                      | `TLC_COLLECTION_EPOCH_INTERVAL=2 TLC_COLLECTION_EPOCH_INTERVAL=0 python train.py --data=coco128.yaml` |                                                                                                                                                                                |
+| `python train.py --data=coco128.yaml --tlc-mc-start 0 --tlc-mc-interval 2`                                      | `TLC_COLLECTION_EPOCH_INTERVAL=2 TLC_COLLECTION_EPOCH_INTERVAL=0 python train.py --data=coco128.yaml` | Here no 3LC YAML is used, so on the first run the Tables are created, and for subsequent runs the latest table in the same lineage will be used.                               |
 | `python collect.py --data='' --tlc-image-embeddings-dim 2 --tlc-revision-url path/to/my_revision_url`           | `TLC_IMAGE_EMBEDDINGS_DIM=2 python val.py --task collect --data 3LC://my_3lc_data.yaml`               | Here we also assume a 3LC YAML exists. Notice how `collect.py` is replaced with `val.py --task collect`.                                                                       |
 
 ## Metrics collection changes
@@ -120,16 +136,6 @@ model weights in `<yolo run dir>/weights/best.pt` after training has concluded (
 
 The environment variables `TLC_COLLECTION_EPOCH_INTERVAL` and `TLC_COLLECTION_EPOCH_START` can be used to select when to collect metrics outside of the final pass described above. Importantly, just like validation passes, this uses the exponential moving average and not the `last.pt` or `best.pt` weights. These collection passes have regular integer epoch values in the Dashboard.
 
-## ``collect.py`` removal
-
-`collect.py` has been removed. In order to run metrics collection outside of training, call `val.py` and provide `--task collect`. This will collect metrics on the train and validation splits by default.
-
-In order to collect metrics on a specific set of splits, the environment variable `TLC_COLLECTION_SPLITS` can be used by setting it to a comma-separated set of splits. All of these splits must be available in the YAML file provided through `--data`.
-
-In order to collect embeddings and/or loss, refer to the corresponding environment variables for training.
-
-In order to specify confidence threshold and max number of detections, use the corresponding command line arguments in `val.py`, i.e. `--conf-thres` and `--max-det` respectively instead of the environment variables.
-
 ## Per-epoch metrics
 
 In the Runs table for a project with YOLOv5 runs, various aggregate validation metrics are shown per-epoch, allowing you to follow your training runs as they are progressing and compare them with each other.
@@ -146,7 +152,7 @@ Attempts to call `val.py` with `--task collect` or providing a `3LC://` prefixed
 
 ## Discard predictions
 
-When adding new `fake` object classes to your dataset, you could previously discard them with `--tlc-discard-categories` or `--tlc-discard-non-zero-preds`. This option is no longer available, but the behavior can still be attained through the following code in `val.py`:
+When adding new `fake` object classes to your dataset, you could previously discard them with `--tlc-discard-categories` or `--tlc-discard-non-zero-preds`. This option is no longer available, but the behavior can still be attained by making changes to `val.py`. The following code can be added to `val.py` as a starting point, it removes predictions with category index 2, 7 and 19:
 
 ```python
 discard_categories = [2, 7, 19] # Indices of classes to discard
