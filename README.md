@@ -43,14 +43,11 @@ In order to get started using the integrations and see documentation, refer to t
 
 ## Release Notes
 
-We are making continuous improvements to the integrations, and aim to keep the integrations up-to-date with the upstream repositories and new features available in `tlc` itself.
+We are making continuous improvements to the integrations, and aim to keep the integrations up-to-date with the upstream repositories and new features available in `3lc` itself.
 
-The following table details the available releases for the YOLOv5/8 integration.
+For YOLOv5, there are different branches corresponding to several different `3lc` versions. The latest supported version is kept as the default branch of the repository.
 
-| Page                                    | Summary                                                                                                                                                                               |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [tlc_2.0.2](release_notes/tlc_2.0.2.md) | `--data` no longer required, optionally discard all classes but class 0, image embeddings, per-image loss metric, updated logging and error reporting and batched metrics collection. |
-| [tlc_2.2.0](release_notes/tlc_2.2.0.md) | Overhaul of the 3LC integration, command line arguments replaced by environment variables, support for `tlc 2.2` project structure, 3LC YAML file, per-epoch and per-class metrics, and much more. Introduction of YOLOv8 integration.         |
+For YOLOv8 (in the repository named `ultralytics`), there is a single branch `tlc-integration` which is kept up to date with the latest major version of `3lc`. No branches are kept for older versions.
 
 ## Exporting data
 
